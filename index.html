@@ -26,7 +26,7 @@
   #combo-display { font-size:clamp(11px,1.5vw,16px); color:#f0c040; letter-spacing:2px; opacity:0; transition:opacity .3s; }
   #feedback { position:absolute; top:44%; left:50%; transform:translate(-50%,-50%); font-size:clamp(20px,3vw,36px); font-weight:700; pointer-events:none; opacity:0; text-shadow:0 0 30px currentColor; z-index:30; letter-spacing:3px; }
 
-  /* BUTTONS (aparecem no jogo) */
+  /* BUTTONS */
   .game-btn { position:absolute; width:clamp(52px,7vw,72px); height:clamp(52px,7vw,72px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:clamp(15px,2.2vw,22px); font-weight:700; cursor:pointer; pointer-events:all; user-select:none; z-index:25; touch-action:none; transition:transform .08s; }
   .game-btn:active { transform:translate(-50%,-50%) scale(.85) !important; }
   .btn-real { background:rgba(20,55,100,.5); border:2.5px solid #4a90d9; color:#a8d4f0; box-shadow:0 0 14px rgba(74,144,217,.45); }
@@ -38,12 +38,13 @@
   .btn-ring { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
   #game-overlay { position:absolute; inset:0 0 clamp(72px,12vw,100px) 0; z-index:10; }
 
-  /* MOBILE PAD — linha de teclas na base */
+  /* MOBILE PAD */
   #mobile-pad { position:absolute; bottom:0; left:0; right:0; height:clamp(72px,12vw,100px); display:flex; align-items:center; justify-content:center; gap:clamp(6px,1.5vw,12px); z-index:35; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); border-top:1px solid rgba(255,255,255,.07); padding:0 12px; }
-  .pad-key { width:clamp(36px,5.5vw,52px); height:clamp(36px,5.5vw,52px); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:clamp(13px,1.8vw,18px); font-weight:700; letter-spacing:1px; cursor:pointer; user-select:none; touch-action:none; background:rgba(255,255,255,.07); border:1.5px solid rgba(255,255,255,.18); color:rgba(255,255,255,.55); transition:background .1s, border-color .1s, color .1s; }
+  .pad-key { width:clamp(36px,5.5vw,52px); height:clamp(36px,5.5vw,52px); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:clamp(13px,1.8vw,18px); font-weight:700; letter-spacing:1px; cursor:pointer; user-select:none; touch-action:none; background:rgba(255,255,255,.07); border:1.5px solid rgba(255,255,255,.18); color:rgba(255,255,255,.55); transition:background .1s,border-color .1s,color .1s; }
   .pad-key.active-key { background:rgba(74,144,217,.35); border-color:#4a90d9; color:#a8d4f0; }
   .pad-key:active { background:rgba(255,255,255,.18) !important; }
   #pad-sep { width:1px; height:60%; background:rgba(255,255,255,.1); margin:0 4px; }
+  @media (hover:hover) and (pointer:fine) { #mobile-pad { opacity:.35; } }
 
   /* ENDING */
   #screen-ending video { width:100%; height:100%; object-fit:cover; }
@@ -68,9 +69,6 @@
   .lb-rank{color:rgba(255,255,255,.3);width:22px} .lb-name{flex:1;padding:0 8px} .lb-score{color:#a8d4f0;font-weight:700}
   #play-again { padding:12px 40px; background:transparent; border:1px solid rgba(168,212,240,.4); color:#a8d4f0; font-family:'Georgia',serif; font-size:clamp(12px,1.4vw,15px); letter-spacing:3px; text-transform:uppercase; cursor:pointer; transition:all .2s; margin-top:8px; }
   #play-again:hover { background:rgba(168,212,240,.1); border-color:#a8d4f0; }
-
-  /* esconde pad em desktop com mouse */
-  @media (hover:hover) and (pointer:fine) { #mobile-pad { opacity:.35; } }
 </style>
 </head>
 <body>
@@ -93,7 +91,6 @@
   </div>
   <div id="feedback"></div>
   <div id="game-overlay"></div>
-  <!-- pad mobile: linha de teclas na base -->
   <div id="mobile-pad">
     <div class="pad-key" data-key="q">Q</div>
     <div class="pad-key" data-key="w">W</div>
@@ -180,7 +177,7 @@ function startGame(){
   const music=document.getElementById('game-music');
   music.volume=CFG.MUSIC_VOL;
   music.currentTime=0;
-  music.play();
+  music.play().catch(()=>{});
   music.addEventListener('timeupdate',checkPhase);
   music.addEventListener('ended',onMusicEnd);
   scheduleSpawn();
@@ -193,9 +190,14 @@ function switchGameVideo(){
   do { next=Math.floor(Math.random()*3); } while(next===lastVideoIdx);
   lastVideoIdx=next;
   gv.src=seqVideos[next];
-  gv.volume=CFG.VIDEO_VOL;
   gv.loop=false;
-  gv.play().catch(()=>{});
+  /* tenta com áudio; se browser bloquear, toca mudo (a música continua) */
+  gv.muted=false;
+  gv.volume=CFG.VIDEO_VOL;
+  gv.play().catch(()=>{
+    gv.muted=true;
+    gv.play().catch(()=>{});
+  });
   gv.onended=switchGameVideo;
 }
 
@@ -256,7 +258,6 @@ function spawnButton(){
   el.appendChild(svg);
   document.getElementById('game-overlay').appendChild(el);
 
-  /* highlight pad key */
   const padKey=document.querySelector('.pad-key[data-key="'+key+'"]');
   if(padKey)padKey.classList.add('active-key');
 
@@ -383,7 +384,8 @@ function onMusicEnd(){
   showScreen('screen-ending');
   const ev=document.getElementById('ending-video');
   ev.src=score>=CFG.WIN_SCORE?'vitoriaoficial.mp4':'derrotaoficial.mp4';
-  ev.play().catch(()=>{});
+  ev.muted=false;
+  ev.play().catch(()=>{ev.muted=true;ev.play().catch(()=>{});});
   ev.onended=()=>showScoreScreen(score>=CFG.WIN_SCORE);
 }
 
@@ -434,7 +436,6 @@ document.getElementById('play-again').addEventListener('click',()=>{
   introZone.style.pointerEvents='all';
 });
 
-/* preload ending videos */
 window.addEventListener('load',()=>{
   ['vitoriaoficial.mp4','derrotaoficial.mp4'].forEach(src=>{
     const v=document.createElement('video');
