@@ -9,33 +9,50 @@
   body { background:#000; width:100vw; height:100vh; overflow:hidden; font-family:'Georgia',serif; color:#fff; display:flex; align-items:center; justify-content:center; }
   .screen { position:absolute; inset:0; display:none; align-items:center; justify-content:center; flex-direction:column; }
   .screen.active { display:flex; }
+
+  /* INTRO */
   #screen-intro video { width:100%; height:100%; object-fit:cover; }
   #click-to-start { position:absolute; bottom:8%; left:50%; transform:translateX(-50%); font-size:clamp(13px,2vw,19px); color:rgba(168,197,218,.85); letter-spacing:3px; text-transform:uppercase; animation:pulse-text 2s ease-in-out infinite; text-shadow:0 0 20px rgba(168,197,218,.5); pointer-events:none; }
   @keyframes pulse-text { 0%,100%{opacity:.35} 50%{opacity:1} }
   #intro-click-zone { position:absolute; inset:0; cursor:pointer; z-index:10; }
-  #screen-game { position:relative; }
+
+  /* GAME */
+  #screen-game { position:relative; flex-direction:column; }
   #game-video { width:100%; height:100%; object-fit:cover; }
   #vignette { position:absolute; inset:0; pointer-events:none; z-index:5; background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.6) 100%); transition:background .3s; }
   #vignette.danger { background:radial-gradient(ellipse at center,transparent 40%,rgba(80,0,0,.75) 100%); }
   #score-display { position:absolute; top:4%; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:4px; z-index:20; }
   #score-number { font-size:clamp(28px,4vw,48px); font-weight:700; color:#fff; text-shadow:0 0 20px rgba(168,197,218,.8); letter-spacing:2px; }
   #combo-display { font-size:clamp(11px,1.5vw,16px); color:#f0c040; letter-spacing:2px; opacity:0; transition:opacity .3s; }
-  #feedback { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:clamp(20px,3vw,36px); font-weight:700; pointer-events:none; opacity:0; text-shadow:0 0 30px currentColor; z-index:30; letter-spacing:3px; }
-  .game-btn { position:absolute; width:clamp(48px,6vw,68px); height:clamp(48px,6vw,68px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:clamp(14px,2vw,20px); font-weight:700; cursor:pointer; pointer-events:all; user-select:none; z-index:25; touch-action:none; }
-  .game-btn:active { transform:translate(-50%,-50%) scale(.88) !important; }
-  .btn-real { background:rgba(20,55,100,.45); border:2.5px solid #4a90d9; color:#a8d4f0; box-shadow:0 0 12px rgba(74,144,217,.4); }
-  .btn-real.perfect-glow { background:rgba(20,90,180,.75); border-color:#b8e0ff; box-shadow:0 0 28px rgba(180,220,255,.9),0 0 56px rgba(100,180,255,.5); color:#e0f4ff; }
-  .btn-trap { background:rgba(70,10,10,.45); border:2.5px solid #b03030; color:#f0a0a0; box-shadow:0 0 12px rgba(180,48,48,.35); }
-  .btn-trap.perfect-glow { background:rgba(120,20,20,.75); border-color:#ff8888; box-shadow:0 0 28px rgba(255,120,120,.7); }
-  .btn-trap-alike { background:rgba(35,20,90,.45); border:2.5px solid #7a6ad9; color:#c8c0f0; box-shadow:0 0 12px rgba(122,106,217,.4); }
-  .btn-trap-alike.perfect-glow { background:rgba(60,30,160,.75); border-color:#c0b8ff; box-shadow:0 0 28px rgba(192,184,255,.8); color:#e8e4ff; }
+  #feedback { position:absolute; top:44%; left:50%; transform:translate(-50%,-50%); font-size:clamp(20px,3vw,36px); font-weight:700; pointer-events:none; opacity:0; text-shadow:0 0 30px currentColor; z-index:30; letter-spacing:3px; }
+
+  /* BUTTONS */
+  .game-btn { position:absolute; width:clamp(52px,7vw,72px); height:clamp(52px,7vw,72px); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:clamp(15px,2.2vw,22px); font-weight:700; cursor:pointer; pointer-events:all; user-select:none; z-index:25; touch-action:none; transition:transform .08s; }
+  .game-btn:active { transform:translate(-50%,-50%) scale(.85) !important; }
+  .btn-real { background:rgba(20,55,100,.5); border:2.5px solid #4a90d9; color:#a8d4f0; box-shadow:0 0 14px rgba(74,144,217,.45); }
+  .btn-real.perfect-glow { background:rgba(20,90,180,.8); border-color:#b8e0ff; box-shadow:0 0 28px rgba(180,220,255,.95),0 0 56px rgba(100,180,255,.5); color:#e0f4ff; }
+  .btn-trap { background:rgba(70,10,10,.5); border:2.5px solid #b03030; color:#f0a0a0; box-shadow:0 0 14px rgba(180,48,48,.4); }
+  .btn-trap.perfect-glow { background:rgba(120,20,20,.8); border-color:#ff8888; box-shadow:0 0 28px rgba(255,120,120,.75); }
+  .btn-trap-alike { background:rgba(35,20,90,.5); border:2.5px solid #7a6ad9; color:#c8c0f0; box-shadow:0 0 14px rgba(122,106,217,.45); }
+  .btn-trap-alike.perfect-glow { background:rgba(60,30,160,.8); border-color:#c0b8ff; box-shadow:0 0 28px rgba(192,184,255,.85); color:#e8e4ff; }
   .btn-ring { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
-  #game-overlay { position:absolute; inset:0; }
-  #touch-hint { position:absolute; bottom:3%; left:50%; transform:translateX(-50%); font-size:10px; color:rgba(255,255,255,.2); letter-spacing:2px; text-transform:uppercase; pointer-events:none; z-index:40; }
+  #game-overlay { position:absolute; inset:0 0 clamp(72px,12vw,100px) 0; z-index:10; }
+
+  /* MOBILE PAD */
+  #mobile-pad { position:absolute; bottom:0; left:0; right:0; height:clamp(72px,12vw,100px); display:flex; align-items:center; justify-content:center; gap:clamp(6px,1.5vw,12px); z-index:35; background:rgba(0,0,0,.55); backdrop-filter:blur(4px); border-top:1px solid rgba(255,255,255,.07); padding:0 12px; }
+  .pad-key { width:clamp(36px,5.5vw,52px); height:clamp(36px,5.5vw,52px); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:clamp(13px,1.8vw,18px); font-weight:700; letter-spacing:1px; cursor:pointer; user-select:none; touch-action:none; background:rgba(255,255,255,.07); border:1.5px solid rgba(255,255,255,.18); color:rgba(255,255,255,.55); transition:background .1s,border-color .1s,color .1s; }
+  .pad-key.active-key { background:rgba(74,144,217,.35); border-color:#4a90d9; color:#a8d4f0; }
+  .pad-key:active { background:rgba(255,255,255,.18) !important; }
+  #pad-sep { width:1px; height:60%; background:rgba(255,255,255,.1); margin:0 4px; }
+  @media (hover:hover) and (pointer:fine) { #mobile-pad { opacity:.35; } }
+
+  /* ENDING */
   #screen-ending video { width:100%; height:100%; object-fit:cover; }
-  #screen-score { background:#050508; flex-direction:column; gap:20px; padding:40px 20px; overflow-y:auto; }
+
+  /* SCORE */
+  #screen-score { background:#050508; gap:18px; padding:36px 20px; overflow-y:auto; }
   #score-title { font-size:clamp(20px,4vw,46px); letter-spacing:6px; text-transform:uppercase; color:#a8d4f0; text-shadow:0 0 30px rgba(168,212,240,.5); }
-  #score-result { font-size:clamp(13px,1.8vw,20px); color:rgba(255,255,255,.55); }
+  #score-result { font-size:clamp(13px,1.8vw,20px); color:rgba(255,255,255,.55); text-align:center; max-width:400px; }
   #score-final { font-size:clamp(46px,8vw,96px); font-weight:700; color:#fff; text-shadow:0 0 40px rgba(168,212,240,.7); letter-spacing:4px; }
   #score-breakdown { display:flex; gap:28px; flex-wrap:wrap; justify-content:center; }
   .breakdown-item { display:flex; flex-direction:column; align-items:center; gap:3px; }
@@ -45,9 +62,9 @@
   #score-verdict { font-size:clamp(15px,2.2vw,26px); letter-spacing:3px; text-transform:uppercase; }
   .verdict-win{color:#a8d4f0;text-shadow:0 0 20px rgba(168,212,240,.6)}
   .verdict-lose{color:#b03030;text-shadow:0 0 20px rgba(176,48,48,.6)}
-  #leaderboard { width:100%; max-width:400px; }
+  #leaderboard { width:100%; max-width:420px; }
   #leaderboard h3 { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,.3); text-align:center; margin-bottom:10px; }
-  .lb-row { display:flex; justify-content:space-between; align-items:center; padding:6px 12px; border-bottom:.5px solid rgba(255,255,255,.07); font-size:clamp(12px,1.4vw,15px); }
+  .lb-row { display:flex; justify-content:space-between; align-items:center; padding:7px 14px; border-bottom:.5px solid rgba(255,255,255,.07); font-size:clamp(12px,1.4vw,15px); }
   .lb-row.me { background:rgba(168,212,240,.08); border-radius:4px; }
   .lb-rank{color:rgba(255,255,255,.3);width:22px} .lb-name{flex:1;padding:0 8px} .lb-score{color:#a8d4f0;font-weight:700}
   #play-again { padding:12px 40px; background:transparent; border:1px solid rgba(168,212,240,.4); color:#a8d4f0; font-family:'Georgia',serif; font-size:clamp(12px,1.4vw,15px); letter-spacing:3px; text-transform:uppercase; cursor:pointer; transition:all .2s; margin-top:8px; }
@@ -55,11 +72,15 @@
 </style>
 </head>
 <body>
+
+<!-- INTRO -->
 <div id="screen-intro" class="screen active">
-  <video id="intro-video" src="IntroFinalV2mp4.mp4" playsinline preload="auto"></video>
+  <video id="intro-video" src="IntroFinalV2reduzido.mp4" playsinline preload="auto"></video>
   <div id="click-to-start">Toque para começar</div>
   <div id="intro-click-zone"></div>
 </div>
+
+<!-- GAME -->
 <div id="screen-game" class="screen">
   <video id="game-video" src="sequencia1.mp4" playsinline preload="auto"></video>
   <audio id="game-music" src="jogo3musica.mp3" preload="auto"></audio>
@@ -70,11 +91,25 @@
   </div>
   <div id="feedback"></div>
   <div id="game-overlay"></div>
-  <div id="touch-hint">teclado: Q W E R / A S D F</div>
+  <div id="mobile-pad">
+    <div class="pad-key" data-key="q">Q</div>
+    <div class="pad-key" data-key="w">W</div>
+    <div class="pad-key" data-key="e">E</div>
+    <div class="pad-key" data-key="r">R</div>
+    <div id="pad-sep"></div>
+    <div class="pad-key" data-key="a">A</div>
+    <div class="pad-key" data-key="s">S</div>
+    <div class="pad-key" data-key="d">D</div>
+    <div class="pad-key" data-key="f">F</div>
+  </div>
 </div>
+
+<!-- ENDING -->
 <div id="screen-ending" class="screen">
   <video id="ending-video" playsinline preload="auto"></video>
 </div>
+
+<!-- SCORE -->
 <div id="screen-score" class="screen">
   <div id="score-title">A Cura Proibida</div>
   <div id="score-result"></div>
@@ -86,9 +121,13 @@
     <div class="breakdown-item"><div class="breakdown-val val-trap" id="stat-trap">0</div><div class="breakdown-lbl">Armadilhas</div></div>
   </div>
   <div id="score-verdict"></div>
-  <div id="leaderboard"><h3>Placar — Cap. XVIII</h3><div id="lb-list"></div></div>
+  <div id="leaderboard">
+    <h3>Melhores Pontuações</h3>
+    <div id="lb-list"></div>
+  </div>
   <button id="play-again">Jogar novamente</button>
 </div>
+
 <script>
 const CFG={
   WIN_SCORE:4500,
@@ -187,7 +226,7 @@ function spawnButton(){
   const available=CFG.KEYS.filter(k=>!usedKeys.includes(k));
   if(!available.length)return;
   const key=available[Math.floor(Math.random()*available.length)];
-  const x=22+Math.random()*58, y=18+Math.random()*64;
+  const x=14+Math.random()*72, y=8+Math.random()*75;
   const duration=CFG.BTN_LIFE[phaseIdx]+(Math.random()*300-150);
   const perfectStart=duration-CFG.PERFECT_WINDOW;
   const btnClass='game-btn '+(!isTrap?'btn-real':isAlike?'btn-trap-alike':'btn-trap');
@@ -198,12 +237,11 @@ function spawnButton(){
   el.textContent=key.toUpperCase();
   el.style.cssText='left:'+x+'%;top:'+y+'%;transform:translate(-50%,-50%);';
 
-  const ringPx=86,cx=43,cy=43,r=40;
+  const ringPx=90,cx=45,cy=45,r=42;
   const circ=Math.PI*2*r;
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.setAttribute('class','btn-ring');
-  svg.setAttribute('width',ringPx);
-  svg.setAttribute('height',ringPx);
+  svg.setAttribute('width',ringPx); svg.setAttribute('height',ringPx);
   const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
   circle.setAttribute('cx',cx); circle.setAttribute('cy',cy); circle.setAttribute('r',r);
   circle.setAttribute('fill','none'); circle.setAttribute('stroke',ringColor);
@@ -215,7 +253,10 @@ function spawnButton(){
   el.appendChild(svg);
   document.getElementById('game-overlay').appendChild(el);
 
-  const btn={el,key,isTrap,isPerfect:false,startTime:performance.now(),duration,perfectStart,circle,circ,dismissed:false};
+  const padKey=document.querySelector('.pad-key[data-key="'+key+'"]');
+  if(padKey)padKey.classList.add('active-key');
+
+  const btn={el,key,isTrap,isPerfect:false,startTime:performance.now(),duration,perfectStart,circle,circ,dismissed:false,padKey};
   activeButtons.push(btn);
   el.addEventListener('pointerdown',e=>{e.preventDefault();handlePress(key);});
   requestAnimationFrame(()=>animateBtn(btn));
@@ -243,16 +284,26 @@ function animateBtn(btn){
 
 function removeBtn(btn){
   btn.dismissed=true;
+  if(btn.padKey)btn.padKey.classList.remove('active-key');
   btn.el.style.transition='opacity .15s';
   btn.el.style.opacity='0';
   setTimeout(()=>btn.el.parentNode&&btn.el.parentNode.removeChild(btn.el),160);
 }
 
-/* ── INPUT ── */
+/* ── INPUT (keyboard) ── */
 document.addEventListener('keydown',e=>{
   if(!gameRunning)return;
   const k=e.key.toLowerCase();
   if(CFG.KEYS.includes(k))handlePress(k);
+});
+
+/* ── INPUT (mobile pad) ── */
+document.querySelectorAll('.pad-key').forEach(pk=>{
+  pk.addEventListener('pointerdown',e=>{
+    e.preventDefault();
+    if(!gameRunning)return;
+    handlePress(pk.dataset.key);
+  });
 });
 
 function handlePress(key){
@@ -321,6 +372,7 @@ function onMusicEnd(){
   clearTimeout(spawnTimer);
   activeButtons.forEach(removeBtn);
   activeButtons=[];
+  document.querySelectorAll('.pad-key').forEach(pk=>pk.classList.remove('active-key'));
   const music=document.getElementById('game-music');
   music.removeEventListener('timeupdate',checkPhase);
   music.removeEventListener('ended',onMusicEnd);
@@ -378,7 +430,6 @@ document.getElementById('play-again').addEventListener('click',()=>{
   introZone.style.pointerEvents='all';
 });
 
-/* preload ending videos */
 window.addEventListener('load',()=>{
   ['vitoriaoficial.mp4','derrotaoficial.mp4'].forEach(src=>{
     const v=document.createElement('video');
